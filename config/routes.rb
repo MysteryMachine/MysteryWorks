@@ -1,4 +1,6 @@
 MysteryWorks::Application.routes.draw do
+  resources :posts, except: [:new, :edit]
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
