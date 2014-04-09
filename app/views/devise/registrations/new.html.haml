@@ -1,0 +1,23 @@
+%div.jumbotron.sign-up
+  %h2 Sign up
+  %div.container
+    = form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f|
+      = devise_error_messages!
+      %div.row
+        %div.col-xs-4.vcenter= f.label :nickname
+        %div.col-xs-8= f.text_field :nickname
+      %div.row
+        %div.col-xs-4.table-cell-login.vcenter= f.label :email
+        %div.col-xs-8= f.email_field :email, :autofocus => true
+
+      %div.row
+        %div.col-xs-4.table-cell-login.vcenter= f.label :password
+        %div.col-xs-8= f.password_field :password
+
+      %div.row
+        %div.col-xs-4= f.label :password_confirmation
+        %div.col-xs-8= f.password_field :password_confirmation
+
+      %div.row
+        %div.col-xs-4
+        %div.col-xs-8= f.submit "Sign up"
