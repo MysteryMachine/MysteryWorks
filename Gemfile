@@ -7,7 +7,7 @@ gem 'rails', '3.2.13'
 
 gem 'rails-api'
 
-gem 'sqlite3'
+gem 'pg'
 
 
 # To use ActiveModel has_secure_password
