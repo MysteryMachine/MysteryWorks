@@ -1,9 +1,9 @@
 app = angular.module("mys", ["ngRoute"]).config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
   $routeProvider.when('/', {
-    templateUrl: 'blog.html',
+    templateUrl: 'pages/home.html',
     controller: 'BlogCtrl'
   }).when('/blog/:blogName', {
-    templateUrl: 'blog.html',
+    templateUrl: 'pages/blog.html',
     controller: 'BlogCtrl'
   });
 }]);
@@ -48,4 +48,26 @@ app.controller('BlogCtrl', function(BlogPagesService, $scope, $rootScope, $locat
   $scope.pgSize = search.pgSize ? search.pgSize : 5;
   $scope.request = BlogPagesService.request($scope.blogName);
   $scope.posts = $scope.request($scope.pgNum, $scope.pgSize);
+  $scope.highlight = $scope.blogName;
+});
+
+app.directive('topbar', function(){
+  return{
+    restrict: 'E',
+    scope: {
+      highlight: '@'
+    },
+    link: function(scope, element, attrs){
+      scope.items = [
+        { url: "/#/", text: "Mystery Works", name: 'false'},
+        { url: "/#/blog/development", text: "Dev Blog", name: "development" }
+      ];
+      angular.forEach(scope.items, function(item, _){
+        if(item.name === scope.highlight){
+          item.highlight = true;
+        }
+      });
+    },
+    templateUrl: 'templates/topbar.html'
+  };
 });

@@ -1,0 +1,9 @@
+<div id="nav">
+  <ul class="nav nav-pills">
+    <li ng-repeat="item in items" ng:class="{true: 'active', false:''}[item.highlight]">
+      <a href="{{item.url}}">
+        {{item.text}}
+      </a>
+    </li>
+  </ul>
+</div>
