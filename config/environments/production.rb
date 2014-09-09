@@ -1,6 +1,8 @@
 MysteryWorks::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
-
+  
+  config.action_mailer.default_url_options = { host: 'http://mystery-works.herokuapp.com/' }
+  
   # Code is not reloaded between requests
   config.cache_classes = true
 
@@ -19,7 +21,9 @@ MysteryWorks::Application.configure do
 
   # Generate digests for assets URLs
   config.assets.digest = true
-
+  
+  config.eager_load = true
+  
   # Defaults to nil and saved in location specified by config.assets.prefix
   # config.assets.manifest = YOUR_PATH
 
