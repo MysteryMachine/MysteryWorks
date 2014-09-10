@@ -54,5 +54,11 @@ module MysteryWorks
     config.assets.version = '1.0'
     
     config.assets.initialize_on_precompile = false
+    
+    config.api_only = false
+    
+    config.session_store = []
+    
+    config.middleware.use ActionDispatch::Flash
   end
 end

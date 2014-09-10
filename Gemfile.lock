@@ -31,8 +31,16 @@ GEM
       tzinfo (~> 1.1)
     arel (5.0.1.20140414130214)
     bcrypt (3.1.7)
+    better_errors (2.0.0)
+      coderay (>= 1.0.0)
+      erubis (>= 2.6.6)
+      rack (>= 0.9.0)
+    binding_of_caller (0.7.2)
+      debug_inspector (>= 0.0.1)
     builder (3.2.2)
     cancan (1.6.10)
+    coderay (1.1.0)
+    debug_inspector (0.0.2)
     devise (3.3.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -48,6 +56,9 @@ GEM
       railties (>= 3.0.0)
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
+    figaro (0.7.0)
+      bundler (~> 1.0)
+      rails (>= 3, < 5)
     hashie (3.3.1)
     hike (1.2.3)
     i18n (0.6.11)
@@ -143,9 +154,12 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers
+  better_errors
+  binding_of_caller
   cancan
   devise
   factory_girl_rails
+  figaro
   omniauth-twitch
   pg
   rails

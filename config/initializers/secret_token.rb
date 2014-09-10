@@ -16,4 +16,4 @@
 # Using secret_token for rails3 compatibility. Change to secret_key_base
 # to avoid deprecation warning.
 # Can be safely removed in a rails3 api-only application.
-MysteryWorks::Application.config.secret_token = 'e5599f7d6f777fdac4acb646e5e907c740beb40ae3c56d22cbf7cf718b10ae7833afb9301a0da65205372ee385a7b53b6c2b4a945843015beadd6867cc656cb3'
+MysteryWorks::Application.config.secret_token = ENV["SECRET_RAILS_TOKEN"]
