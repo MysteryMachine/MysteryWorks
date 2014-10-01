@@ -11,6 +11,10 @@ class ApplicationController < ActionController::Base
     ENV["APP_PATH"]
   end
   
+  def default_serializer_options
+    {root: false}
+  end
+  
   def new
     render :json, :nothing => true
   end

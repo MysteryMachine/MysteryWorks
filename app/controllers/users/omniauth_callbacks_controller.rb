@@ -4,8 +4,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     
     if @user.persisted?
       sign_in @user #this will throw if @user is not activated
+      redirect_to app_path
     end
-    puts app_path
-    redirect_to app_path
   end
 end
