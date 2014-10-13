@@ -11,26 +11,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140911031423) do
+ActiveRecord::Schema.define(version: 20141013033919) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "bets", force: true do |t|
-    t.integer  "user_id"
-    t.integer  "channel_id"
-    t.integer  "amount"
+    t.integer  "channel_account_id",                  null: false
+    t.integer  "amount",                              null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "enemy_id"
-    t.string   "status"
+    t.integer  "enemy_id",                            null: false
+    t.string   "status",             default: "open", null: false
+  end
+
+  create_table "channel_accounts", force: true do |t|
+    t.integer "balance",    default: 10,         null: false
+    t.integer "channel_id",                      null: false
+    t.integer "user_id",                         null: false
+    t.integer "health",     default: 6,          null: false
+    t.integer "max_health", default: 6,          null: false
+    t.string  "status",     default: "inactive", null: false
   end
 
   create_table "channels", force: true do |t|
-    t.string   "name"
-    t.string   "state"
+    t.string   "name",                            null: false
+    t.string   "status",     default: "inactive", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "user_id",                         null: false
   end
 
   create_table "users", force: true do |t|
@@ -49,7 +58,6 @@ ActiveRecord::Schema.define(version: 20140911031423) do
     t.string   "provider"
     t.string   "uid"
     t.string   "name"
-    t.integer  "balance"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

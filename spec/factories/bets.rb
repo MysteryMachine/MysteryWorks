@@ -1,7 +1,6 @@
 FactoryGirl.define do
   factory :bet do
-    user
-    channel
+    channel_account
     enemy_id 1
     status "open"
     amount 10

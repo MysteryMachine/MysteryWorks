@@ -2,7 +2,7 @@ class Bet < ActiveRecord::Base
   include BetHelper
   
   belongs_to :channel_account
-  belongs_to :channel, :through => :channel_account
+  delegate :channel, :to => :channel_account
 
   validates :enemy_id, :numericality => { :greater_than => 0 }
   validates :channel_account_id, :numericality => { :greater_than => 0 }
@@ -13,20 +13,22 @@ class Bet < ActiveRecord::Base
   scope :winners, lambda {|enemy_id| where(:enemy_id => enemy_id).active}
   scope :losers, lambda {|enemy_id| where("enemy_id != ?", enemy_id).active}
   
+  # HELPERS
+  
   def pay_out(amount)
     channel_account.pay_out(amount)
     self.status = PAID_OUT
-    self.save
+    self.save!
   end
   
   def invalidate
     channel_account.pay_out(amount)
     self.status = INVALIDATED
-    self.save
+    self.save!
   end
   
   def close
     self.status = CLOSED
-    self.save
+    self.save!
   end
 end
