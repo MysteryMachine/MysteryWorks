@@ -85,6 +85,34 @@ describe ChannelAccount do
     end
   end
   
+  describe "permissions helpers" do
+    let(:channel_account_inactive){ create :channel_account, :status => "inactive" }
+    let(:channel_account_donating){ create :channel_account, :status => "donating_blood" }
+    let(:channel_account_resting){ create :channel_account, :status => "resting" }
+    let(:channel_account_betting){ create :channel_account, :status => "betting" }
+    
+    describe "#can_rest" do
+      it{ expect(channel_account_inactive.can_rest?).to eq(true) }
+      it{ expect(channel_account_donating.can_rest?).to eq(false) }
+      it{ expect(channel_account_resting.can_rest?).to eq(false) }
+      it{ expect(channel_account_betting.can_rest?).to eq(false) }
+    end
+    
+    describe "#can_donate_blood" do
+      it{ expect(channel_account_inactive.can_rest?).to eq(true) }
+      it{ expect(channel_account_donating.can_rest?).to eq(false) }
+      it{ expect(channel_account_resting.can_rest?).to eq(false) }
+      it{ expect(channel_account_betting.can_rest?).to eq(false) }
+    end
+    
+    describe "#can_bet" do
+      it{ expect(channel_account_inactive.can_rest?).to eq(true) }
+      it{ expect(channel_account_donating.can_rest?).to eq(false) }
+      it{ expect(channel_account_resting.can_rest?).to eq(false) }
+      it{ expect(channel_account_betting.can_rest?).to eq(false) }
+    end
+  end
+  
   describe "validations" do
     it{
       expect(channel_account.valid?).to eq(true)

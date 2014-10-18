@@ -7,5 +7,21 @@ MysteryWorks::Application.routes.draw do
   end
   
   get '/user', to: 'users#user'
-  get '/channel/:name', to: 'channel#show'
+  
+  resource :channel, :only => [:show] do
+    member do
+      post 'set_inactive'
+      post 'open_betting'
+      post 'close_betting'
+      post 'complete_betting'
+    end
+  end
+  
+  resource :channel_account, :only => [:show] do
+    member do
+      post 'rest'
+      post 'donate_blood'
+      post 'bet'
+    end
+  end
 end

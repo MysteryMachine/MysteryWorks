@@ -16,4 +16,40 @@ class User < ActiveRecord::Base
   def self.new_with_session(params, session)
     super.tap {|n|}
   end
+  
+  def owns_channel_account?(channel_account)
+    channel_account.user_id == id
+  end
+  
+  def owns_channel?(channel)
+    channel.user_id == id
+  end
+  
+  def can_rest?(channel_account)
+    owns_channel_account?(channel_account) && channel_account.can_rest?
+  end
+  
+  def can_donate_blood?(channel_account)
+    owns_channel_account?(channel_account) && channel_account.can_donate_blood?
+  end
+  
+  def can_bet?(channel_account)
+    owns_channel_account?(channel_account) && channel_account.can_bet?
+  end
+  
+  def can_set_inactive?(channel)
+    owns_channel?(channel) && channel.can_set_inactive?
+  end
+  
+  def can_open_betting?(channel)
+    owns_channel?(channel) && channel.can_open_betting?
+  end
+  
+  def can_close_betting?(channel)
+    owns_channel?(channel) && channel.can_close_betting?
+  end
+  
+  def can_complete_betting?(channel)
+    owns_channel?(channel) && channel.can_complete_betting?
+  end
 end

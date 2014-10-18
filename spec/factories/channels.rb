@@ -5,27 +5,13 @@ FactoryGirl.define do
     
     trait :with_bets do
       after(:create) do |channel|
-        channel_account = create(:channel_account, :channel => channel, :status => "betting")
-        channel_account_loser = create(:channel_account, :channel => channel, :status => "betting")
-        channel_account_closed = create(:channel_account, :channel => channel, :status => "inactive")
-        channel_account_invalidated = create(:channel_account, :channel => channel, :status => "inactive")
-        channel_account_paid_out = create(:channel_account, :channel => channel, :status => "inactive")
-        channel_account_resting = create(:channel_account, :status => "resting")
-        channel_account_donating = create :channel_account, :status => "donating_blood"
-        
-        channel_account.bets << create(:bet, :channel_account => channel_account)
-        channel_account_loser.bets << create(:bet, :loser, :channel_account => channel_account_loser)
-        channel_account_closed.bets << create(:bet, :closed, :channel_account => channel_account_closed)
-        channel_account_invalidated.bets << create(:bet, :invalidated, :channel_account => channel_account_invalidated)
-        channel_account_paid_out.bets << create(:bet, :paid_out, :channel_account => channel_account_paid_out)
-        
-        channel.channel_accounts << channel_account
-        channel.channel_accounts << channel_account_loser
-        channel.channel_accounts << channel_account_closed
-        channel.channel_accounts << channel_account_invalidated
-        channel.channel_accounts << channel_account_paid_out
-        channel.channel_accounts << channel_account_resting
-        channel.channel_accounts << channel_account_donating
+        channel.channel_accounts << create(:channel_account, :with_winning_bet, :channel => channel)
+        channel.channel_accounts << create(:channel_account, :with_loser_bet, :channel => channel)
+        channel.channel_accounts << create(:channel_account, :with_closed_bet, :channel => channel)
+        channel.channel_accounts << create(:channel_account, :with_invalidated_bet, :channel => channel)
+        channel.channel_accounts << create(:channel_account, :with_paid_out_bet, :channel => channel)
+        channel.channel_accounts << create(:channel_account, :resting, :channel => channel)
+        channel.channel_accounts << create(:channel_account, :donating_blood, :channel => channel)
       end
     end
   end

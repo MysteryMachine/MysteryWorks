@@ -48,6 +48,18 @@ class ChannelAccount < ActiveRecord::Base
   end
   
   # HELPERS
+  def can_rest?
+    self.status == STATUS_INACTIVE
+  end
+  
+  def can_donate_blood?
+    self.status == STATUS_INACTIVE
+  end
+  
+  def can_bet?
+    self.status == STATUS_INACTIVE
+  end
+  
   def pay_out(amount)
     self.balance += amount
     self.save!
