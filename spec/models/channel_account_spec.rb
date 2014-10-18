@@ -154,6 +154,11 @@ describe ChannelAccount do
       channel_account.max_health = 5
       expect(channel_account.valid?).to eq(false)
     }
+    
+    it{
+      channel_account.status = "random"
+      expect(channel_account.valid?).to eq(false)
+    }
   end
   
   describe "defaults" do

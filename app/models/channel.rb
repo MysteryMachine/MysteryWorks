@@ -44,6 +44,22 @@ class Channel < ActiveRecord::Base
   end
   
   # HELPERS
+  def can_set_inactive
+    true
+  end
+  
+  def can_open_betting
+    status == INACTIVE
+  end
+  
+  def can_close_betting
+    status == BETTING_OPEN
+  end
+  
+  def can_complete_betting
+    status == BETTING_CLOSED
+  end
+  
   def active_bets
     bets.active
   end

@@ -9,6 +9,7 @@ class ChannelAccount < ActiveRecord::Base
   validates :balance, :numericality => { :greater_than_or_equal_to => 0 }
   validates :max_health, :numericality => { :greater_than => 5, :less_than_or_equal_to => 20 }
   validates :health, :numericality => { :greater_than => 0 }
+  validates :status, :inclusion => { :in => VALID_STATUSES }
   validate :health_correct
   def health_correct
    self.errors.add(:health, "too much health") if health > max_health

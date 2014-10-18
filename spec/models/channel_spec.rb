@@ -63,6 +63,30 @@ describe Channel do
     expect(account_4.health).to eq(5)
   end
   
+  describe "states" do
+    let(:channel_inactive){ create :channel, :status => "inactive" }
+    let(:channel_betting_open){ create :channel, :status => "betting_open" }
+    let(:channel_betting_closed){ create :channel, :status => "betting_closed" }
+    
+    describe "#can_open_betting" do
+      it{ expect(channel_inactive.can_open_betting).to eq(true) }
+      it{ expect(channel_betting_open.can_open_betting).to eq(false) }
+      it{ expect(channel_betting_closed.can_open_betting).to eq(false) }
+    end
+    
+    describe "#can_close_betting" do
+      it{ expect(channel_inactive.can_close_betting).to eq(false) }
+      it{ expect(channel_betting_open.can_close_betting).to eq(true) }
+      it{ expect(channel_betting_closed.can_close_betting).to eq(false) }
+    end
+    
+    describe "#can_complete_betting" do
+      it{ expect(channel_inactive.can_complete_betting).to eq(false) }
+      it{ expect(channel_betting_open.can_complete_betting).to eq(false) }
+      it{ expect(channel_betting_closed.can_complete_betting).to eq(true) }
+    end
+  end
+  
   describe "#set_inactive" do
     let!(:channel){ create :channel, :with_bets, :status => "betting_open" }
     

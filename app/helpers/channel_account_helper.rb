@@ -22,4 +22,6 @@ module ChannelAccountHelper
   STATUS_DONATING_BLOOD = "donating_blood"
   STATUS_BETTING = "betting"
   STATUS_INACTIVE = "inactive"
+  
+  VALID_STATUSES = [STATUS_RESTING, STATUS_DONATING_BLOOD, STATUS_BETTING, STATUS_INACTIVE]
 end
