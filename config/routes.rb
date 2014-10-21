@@ -8,7 +8,7 @@ MysteryWorks::Application.routes.draw do
   
   get '/user', to: 'users#user'
   
-  resource :channel, :only => [:show] do
+  resources :channels, :only => [:show] do
     member do
       post 'set_inactive'
       post 'open_betting'
@@ -17,7 +17,7 @@ MysteryWorks::Application.routes.draw do
     end
   end
   
-  resource :channel_account, :only => [:show] do
+  resources :channel_accounts, :only => [:show] do
     member do
       post 'rest'
       post 'donate_blood'

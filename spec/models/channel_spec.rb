@@ -155,6 +155,21 @@ describe Channel do
     it{ expect(channel.active_bets).to match([channel.bets[0], channel.bets[1]]) }
   end
   
+  describe "#find_or_create_users_channel_account" do
+    let(:channel){ create :channel }
+    let(:channel_account_having_user){ 
+      user = create :user 
+      create :channel_account, :channel => channel, :user => user
+      user
+    }
+    let(:channel_accountless_user){ create :user }
+    
+    it{ channel_account_having_user; expect{ channel.find_or_create_users_channel_account(channel_account_having_user) }.not_to change{ ChannelAccount.all.length } }
+    it{ expect{ channel.find_or_create_users_channel_account(channel_accountless_user) }.to change{ ChannelAccount.all.length }.by(1) }
+    it{ expect(channel.find_or_create_users_channel_account(channel_account_having_user).user_id).to eq(channel_account_having_user.id) }
+    it{ expect(channel.find_or_create_users_channel_account(channel_accountless_user).user_id).to eq(channel_accountless_user.id) }
+  end
+  
   describe "#complete_bets" do
     let!(:channel){ create :channel, :with_bets, :status => "betting_closed" }
     let!(:channel_account_right){ channel.channel_accounts[0] }
