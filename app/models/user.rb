@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   devise :omniauthable, :omniauth_providers => [:twitch]
   
   has_many :channel_accounts
+  has_many :channel
   
   validates :name, :presence => true
   
