@@ -1,8 +1,21 @@
 require 'rails_helper'
 
 describe User do
+  let(:user){ create :user }
+  
+  describe "validations" do
+    let(:other_user){ create :user }
+    it{ }
+  end
+  
+  describe "#request_channel" do
+    it{ expect(user.request_channel).to eq(true) }
+    it{ user.request_channel; expect(user.request_channel).to eq(false) }
+    it{ expect{ user.request_channel }.to change{ user.channel }.from(nil) }
+    it{ user.request_channel; expect{ user.request_channel }.not_to change{ user.channel } }
+  end
+  
   describe "permissions helpers" do
-    let(:user){ create :user }
     let(:channel_inactive){ create :channel, :status => "inactive", :user => user }
     let(:channel_betting_open){ create :channel, :status => "betting_open", :user => user }
     let(:channel_betting_closed){ create :channel, :status => "betting_closed", :user => user }

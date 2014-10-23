@@ -3,14 +3,24 @@ class User < ActiveRecord::Base
   devise :omniauthable, :omniauth_providers => [:twitch]
   
   has_many :channel_accounts
-  has_many :channel
+  belongs_to :channel
   
-  validates :name, :presence => true
+  validates :channel_id, :uniqueness => true, :allow_nil => true
   
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid.to_s).first_or_create do |user|
       user.name = auth.info.name
       user.email = auth.info.email
+    end
+  end
+  
+  def request_channel
+    if channel.nil?
+      channel = Channel.new(:name => self.name)
+      self.channel = channel
+      channel.save
+    else
+      false
     end
   end
   
@@ -23,7 +33,7 @@ class User < ActiveRecord::Base
   end
   
   def owns_channel?(channel)
-    channel.user_id == id
+    channel.id == channel_id
   end
   
   def can_rest?(channel_account)

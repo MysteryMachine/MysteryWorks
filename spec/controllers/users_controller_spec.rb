@@ -11,7 +11,7 @@ describe UsersController do
       }
       
       it{ expect(response.code).to eq "200" }
-      it{ expect(JSON.parse(response.body)["name"]).to eq "mysterymachinesa" }
+      it{ expect(JSON.parse(response.body)["channel_id"]).to eq user.channel_id }
     end
     
     context "logged out" do

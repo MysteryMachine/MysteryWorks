@@ -2,7 +2,7 @@ class Channel < ActiveRecord::Base
   include ChannelHelper
   validates :status, :inclusion => { :in => VALID_STATES }
   
-  belongs_to :user
+  has_one :user
   has_many :channel_accounts
   has_many :bets, :through => :channel_accounts
   
