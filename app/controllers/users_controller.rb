@@ -1,4 +1,4 @@
-class UsersController < UncachedController
+class UsersController < ApplicationController
   respond_to :json
   
   def user

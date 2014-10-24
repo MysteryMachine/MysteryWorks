@@ -1,4 +1,4 @@
-class ChannelAccountsController < UncachedController
+class ChannelAccountsController < ApplicationController
   respond_to :json
   load_and_authorize_resource
   

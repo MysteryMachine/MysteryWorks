@@ -5,9 +5,6 @@ class ApplicationController < ActionController::Base
 
   serialization_scope :current_user
   
-  before_filter :cors_preflight_check
-  after_filter :cors_set_access_control_headers
-  
   def new_session_path(scope)
     return new_user_session_path
   end
@@ -38,18 +35,4 @@ class ApplicationController < ActionController::Base
   end
   
   private 
-  
-  def cors_set_access_control_headers
-    headers['Access-Control-Allow-Origin'] = ENV["ORIGIN"]
-    headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
-    headers['Access-Control-Max-Age'] = "1728000"
-    headers['Access-Control-Allow-Credentials'] = 'true'
-  end
-
-  def cors_preflight_check
-    headers['Access-Control-Allow-Origin'] = ENV["ORIGIN"]
-    headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
-    headers['Access-Control-Allow-Headers'] = 'X-Requested-With, X-Prototype-Version'
-    headers['Access-Control-Max-Age'] = '1728000'
-  end
 end

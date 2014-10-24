@@ -1,4 +1,4 @@
-class ChannelsController < UncachedController
+class ChannelsController < ApplicationController
   respond_to :json
   load_and_authorize_resource :except => [:create]
   authorize_resource :only => [:create]
