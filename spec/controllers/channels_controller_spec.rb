@@ -2,14 +2,47 @@ require 'rails_helper'
 
 describe ChannelsController do
   let(:user){ create :user }
+  let(:json){ JSON.parse response.body }
   let(:channel_inactive){ create :channel, :status => "inactive", :user => user }
   let(:channel_betting_open){ create :channel, :status => "betting_open", :user => user }
   let(:channel_betting_closed){ create :channel, :status => "betting_closed", :user => user }
   let(:channel){ create :channel, :user => user }
   let(:unrelated_channel){ create :channel }
   
+  describe "POST #create" do
+    context "logged in" do
+      before{
+        sign_in user
+      }
+      
+      context "first time" do
+        before{
+          post :create
+        }
+        it{ expect(response.code).to eq "200" }
+        it{ expect(user.reload.channel).not_to eq(nil) }
+        it{ expect(json["id"]).to eq(user.reload.channel.id) }
+      end
+      
+      context "other time or failures" do
+        let(:channel_id){ user.channel.id }
+        before{
+          post :create
+        }
+        it{ post :create; expect(response.code).to eq("400") }
+        it{ expect{ post :create }.not_to change{ user.reload.channel } }
+      end
+    end
+    
+    context "logged out" do
+      before{
+        post :create
+      }
+      it{ expect(response.code).to eq "403" }
+    end
+  end
+  
   describe "GET #show" do
-    let(:json){ JSON.parse response.body }
     let(:channel_account){ channel.channel_accounts.first }
     
     context "account creation" do

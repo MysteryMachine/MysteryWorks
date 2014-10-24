@@ -1,6 +1,15 @@
 class ChannelsController < UncachedController
   respond_to :json
-  load_and_authorize_resource
+  load_and_authorize_resource :except => [:create]
+  authorize_resource :only => [:create]
+  
+  def create
+    if current_user.request_channel
+      render :json => current_user.channel, :status => 200
+    else
+      render :nothing => true , :status => 400
+    end
+  end
   
   def show
     if !current_user.nil? && @channel.find_channel_account(current_user).nil?

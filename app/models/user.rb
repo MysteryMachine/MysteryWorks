@@ -23,9 +23,16 @@ class User < ActiveRecord::Base
   
   def request_channel
     if channel.nil?
-      channel = Channel.new(:name => self.name)
-      self.channel = channel
-      channel.save
+      begin
+        transaction do
+          channel = Channel.new(:name => self.name)
+          channel.save!
+          self.channel_id = channel.id
+          self.save!
+        end
+      rescue ActiveRecord::RecordInvalid
+        false
+      end
     else
       false
     end

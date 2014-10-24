@@ -10,6 +10,7 @@ class Ability
       can :donate_blood, ChannelAccount do |channel_account| user.can_donate_blood?(channel_account) end
       can :bet, ChannelAccount do |channel_account| user.can_bet?(channel_account) end
             
+      can :create, Channel 
       can :set_inactive, Channel do |channel| user.can_set_inactive?(channel) end
       can :open_betting, Channel do |channel| user.can_open_betting?(channel) end
       can :close_betting, Channel do |channel| user.can_close_betting?(channel) end

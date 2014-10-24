@@ -16,6 +16,7 @@ describe User do
     it{ expect(user.request_channel).to eq(true) }
     it{ user.request_channel; expect(user.request_channel).to eq(false) }
     it{ expect{ user.request_channel }.to change{ user.channel }.from(nil) }
+    it{ expect{ user.stub(:save!){ Bet.new.save! }; user.request_channel }.not_to change{ user.channel }.from(nil) }
     it{ user.request_channel; expect{ user.request_channel }.not_to change{ user.channel } }
   end
   
