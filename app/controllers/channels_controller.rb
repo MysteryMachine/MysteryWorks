@@ -12,6 +12,7 @@ class ChannelsController < ApplicationController
   end
   
   def show
+    # If the user exists and does not have a channel
     if !current_user.nil? && @channel.find_channel_account(current_user).nil?
       current_user.channel_account_for(@channel) 
     end

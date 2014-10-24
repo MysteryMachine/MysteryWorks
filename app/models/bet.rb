@@ -1,3 +1,8 @@
+# Bets are automata that can be made, invalidated (in which case
+# the bet returns its value to the user), paid_out, in which case
+# they return a defined amount of money to the user, or closed,
+# in which case the bet does nothing. All three actions bring
+# the bet to its final state
 class Bet < ActiveRecord::Base
   include BetHelper
   
@@ -15,8 +20,8 @@ class Bet < ActiveRecord::Base
   
   # HELPERS
   
-  def pay_out(amount)
-    channel_account.pay_out(amount)
+  def pay_out(paid_amount)
+    channel_account.pay_out(paid_amount)
     self.status = PAID_OUT
     self.save!
   end

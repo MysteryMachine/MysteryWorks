@@ -1,3 +1,9 @@
+# Channels are where bets are sent to. They can open bets, 
+# close bets, invalidate bets, and complete bets. When completing
+# a bet, a channel may invalidate all bets if no one wins, or pay
+# them out if someone does. After completing bets, all channel
+# accounts are returned to their default states
+# Channels are heavily based on automata.
 class Channel < ActiveRecord::Base
   include ChannelHelper
   validates :status, :inclusion => { :in => VALID_STATES }
@@ -85,6 +91,9 @@ class Channel < ActiveRecord::Base
     self.save!
   end
   
+  # Selects all winners and losers. If someone won, calculate the pot, and award
+  # a proportional amount of it to every winner. Close the bets of the losers
+  # If no one won, invalidate all the bets
   def pay_out(enemy_id)
     winners = bets.winners(enemy_id)
     losers = bets.losers(enemy_id)

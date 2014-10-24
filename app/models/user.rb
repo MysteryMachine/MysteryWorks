@@ -1,3 +1,6 @@
+# Users are CanCan objects that are used as our sessions thing
+# They own channel accounts, and can request a channel for
+# themselves and channel_accounts for other users' channels
 class User < ActiveRecord::Base
   devise :rememberable
   devise :omniauthable, :omniauth_providers => [:twitch]
@@ -8,6 +11,9 @@ class User < ActiveRecord::Base
   validates :channel_id, :uniqueness => true, :allow_nil => true
   validates_presence_of :name
   
+  # An OAuth magic function stolen from the wiki. Sets the provider, uid
+  # name, and email of a User and creates it if a User doesn't exist, other
+  # wise, it just selects the existing user
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid.to_s).first_or_create do |user|
       user.name = auth.info.name
@@ -15,12 +21,14 @@ class User < ActiveRecord::Base
     end
   end
   
-  def channel_account_for( channel)
+  # Creates a channel account for a given channel
+  def channel_account_for(channel)
     ca = ChannelAccount.new(:user_id => id, :channel_id => channel.id)
     ca.save
     self.channel_accounts << ca
   end
   
+  # If the user does not have a channel, create it
   def request_channel
     if channel.nil?
       begin
@@ -38,6 +46,7 @@ class User < ActiveRecord::Base
     end
   end
   
+  # Sessions magic copied from the wiki
   def self.new_with_session(params, session)
     super.tap {|n|}
   end

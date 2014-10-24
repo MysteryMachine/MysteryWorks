@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
 
   serialization_scope :current_user
   
+  # This function is used by OAuth, was copied from wiki
   def new_session_path(scope)
     return new_user_session_path
   end
@@ -21,6 +22,8 @@ class ApplicationController < ActionController::Base
     {root: false}
   end
   
+  # Shouldn't do anything, but is here just in case it's used
+  # in the background somewhere by OAuth
   def new
     render :nothing => true
   end
@@ -33,6 +36,4 @@ class ApplicationController < ActionController::Base
   rescue_from CanCan::AccessDenied do |exception|
     render :nothing => true, :status => 403
   end
-  
-  private 
 end

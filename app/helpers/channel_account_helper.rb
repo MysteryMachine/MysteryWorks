@@ -1,4 +1,5 @@
 module ChannelAccountHelper
+  # Selects N random numbers from result_range and sums them. N is selected randomly from select_range.
   def select(result_range, select_range)
     result = 0
     ( select_range[rand(select_range.length)] ).times { result += result_range[rand(result_range.length)] }

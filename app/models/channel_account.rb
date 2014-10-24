@@ -1,3 +1,8 @@
+# A finite automata. From an inactive state, they can rest to obtain random
+# amounts of health, donate_blood to lose a health and gain money back,
+# or bet, which sets aside some money and may or may not return money back
+# to the channel_account later. When it deactivates, it resets to an inactive
+# state
 class ChannelAccount < ActiveRecord::Base
   include ChannelAccountHelper
   
@@ -17,6 +22,8 @@ class ChannelAccount < ActiveRecord::Base
   
   # ACTIONS
   
+  # Adds a randomly determined amount of health to health, reaching,
+  # at most, max_health. Sets status to resting.
   def rest
     self.status = STATUS_RESTING
     self.health += select_rest
@@ -24,6 +31,8 @@ class ChannelAccount < ActiveRecord::Base
     self.save
   end
   
+  # Subtracts 1 health from self and awards self a random amount of
+  # money. Sets status to donating_blood
   def donate_blood  
     self.status = STATUS_DONATING_BLOOD
     self.health -= 1
@@ -31,6 +40,8 @@ class ChannelAccount < ActiveRecord::Base
     self.save
   end
   
+  # Subtracts amount from balance, and creates a Bet for that enemy
+  # and channel_account. Sets status to betting
   def bet(amount, enemy_id)
     begin
       transaction do
