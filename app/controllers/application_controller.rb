@@ -5,6 +5,9 @@ class ApplicationController < ActionController::Base
 
   serialization_scope :current_user
   
+  before_filter :cors_preflight_check
+  after_filter :cors_set_access_control_headers
+  
   def new_session_path(scope)
     return new_user_session_path
   end
@@ -22,14 +25,31 @@ class ApplicationController < ActionController::Base
   end
   
   def new
-    render :json, :nothing => true
+    render :nothing => true
   end
   
   def destroy
-    render :json, :nothing => true
+    sign_out current_user
+    render :nothing => true
   end
   
   rescue_from CanCan::AccessDenied do |exception|
     render :nothing => true, :status => 403
+  end
+  
+  private 
+  
+  def cors_set_access_control_headers
+    headers['Access-Control-Allow-Origin'] = ENV["ORIGIN"]
+    headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
+    headers['Access-Control-Max-Age'] = "1728000"
+    headers['Access-Control-Allow-Credentials'] = 'true'
+  end
+
+  def cors_preflight_check
+    headers['Access-Control-Allow-Origin'] = ENV["ORIGIN"]
+    headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
+    headers['Access-Control-Allow-Headers'] = 'X-Requested-With, X-Prototype-Version'
+    headers['Access-Control-Max-Age'] = '1728000'
   end
 end

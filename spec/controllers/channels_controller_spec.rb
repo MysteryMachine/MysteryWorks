@@ -12,6 +12,24 @@ describe ChannelsController do
     let(:json){ JSON.parse response.body }
     let(:channel_account){ channel.channel_accounts.first }
     
+    context "account creation" do
+      let(:new_user){ create :user }
+      before{
+        sign_in new_user
+        expect(new_user.channel_accounts.length).to eq(0)
+        channel.status = "betting_open"
+        channel.save!
+        get :show, {:id => channel.id, :format => :json}
+      }
+      
+      it{ expect(response.code).to eq "200" }
+      it{ expect(new_user.reload.channel_accounts.length).to eq(1) }
+      it{ expect(new_user.reload.channel_accounts.first.channel_id).to eq(channel.id) }
+      it{
+        get :show, {:id => channel.id, :format => :json}; expect(new_user.reload.channel_accounts.length).to eq(1)
+      }
+    end
+    
     context "user" do
       before{
         sign_in user

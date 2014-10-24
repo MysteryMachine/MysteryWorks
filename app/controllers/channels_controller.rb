@@ -1,8 +1,12 @@
-class ChannelsController < ApplicationController
+class ChannelsController < UncachedController
   respond_to :json
   load_and_authorize_resource
   
   def show
+    if !current_user.nil? && @channel.find_channel_account(current_user).nil?
+      current_user.channel_account_for(@channel) 
+    end
+    
     render :json => @channel
   end
   

@@ -6,12 +6,19 @@ class User < ActiveRecord::Base
   belongs_to :channel
   
   validates :channel_id, :uniqueness => true, :allow_nil => true
+  validates_presence_of :name
   
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid.to_s).first_or_create do |user|
       user.name = auth.info.name
       user.email = auth.info.email
     end
+  end
+  
+  def channel_account_for( channel)
+    ca = ChannelAccount.new(:user_id => id, :channel_id => channel.id)
+    ca.save
+    self.channel_accounts << ca
   end
   
   def request_channel

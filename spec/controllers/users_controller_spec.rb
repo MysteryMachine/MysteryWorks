@@ -19,7 +19,7 @@ describe UsersController do
         get :user, :format => :json
       }
       
-      it{ expect(response.code).to eq "302" }
+      it{ expect(response.code).to eq "400" }
     end
   end
 end

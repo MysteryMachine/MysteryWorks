@@ -44,14 +44,12 @@ class Channel < ActiveRecord::Base
   end
   
   # HELPERS
-  def find_or_create_users_channel_account(user)
+  def find_channel_account(user)
     possible_accounts = channel_accounts.where(:user_id => user.id)
     if possible_accounts.length >= 1
       possible_accounts.first
     else
-      new_account = ChannelAccount.new(:user_id => user.id, :channel_id => id)
-      new_account.save
-      new_account
+      nil
     end
   end
   

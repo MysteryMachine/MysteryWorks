@@ -4,8 +4,12 @@ describe User do
   let(:user){ create :user }
   
   describe "validations" do
-    let(:other_user){ create :user }
-    it{ }
+    let!(:other_user){ create :user, :channel => channel_used }
+    let!(:channel_used){ create :channel }
+    let!(:channel_unused){ create :channel }
+    it{ expect(User.new(:channel_id => channel_used.id, :name => "my name").save).to eq(false) }
+    it{ expect(User.new(:channel_id => channel_unused.id).save).to eq(false) }
+    it{ expect(User.new(:channel_id => channel_unused.id, :name => "my name").save).to eq(true) }
   end
   
   describe "#request_channel" do
@@ -13,6 +17,12 @@ describe User do
     it{ user.request_channel; expect(user.request_channel).to eq(false) }
     it{ expect{ user.request_channel }.to change{ user.channel }.from(nil) }
     it{ user.request_channel; expect{ user.request_channel }.not_to change{ user.channel } }
+  end
+  
+  describe "#channel_account_for" do
+    let(:channel){ create :channel }
+    it{ expect{ user.channel_account_for(channel) }.to change{ user.channel_accounts.length }.by(1) }
+    it{ user.channel_account_for(channel); expect(user.channel_accounts.last.channel_id).to eq(channel.id) }
   end
   
   describe "permissions helpers" do
