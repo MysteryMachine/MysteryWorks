@@ -1,7 +1,5 @@
 FactoryGirl.define do
   factory :channel do
-    name "mantron"
-    
     trait :with_bets do
       after(:create) do |channel|
         channel.channel_accounts << create(:channel_account, :with_winning_bet, :channel => channel)

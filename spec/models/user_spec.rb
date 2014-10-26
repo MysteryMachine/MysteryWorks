@@ -7,9 +7,23 @@ describe User do
     let!(:other_user){ create :user, :channel => channel_used }
     let!(:channel_used){ create :channel }
     let!(:channel_unused){ create :channel }
-    it{ expect(User.new(:channel_id => channel_used.id, :name => "my name").save).to eq(false) }
-    it{ expect(User.new(:channel_id => channel_unused.id).save).to eq(false) }
-    it{ expect(User.new(:channel_id => channel_unused.id, :name => "my name").save).to eq(true) }
+
+    it{ expect(User.new(:channel_id => channel_unused.id, :name => "my name", :display_name => "My Name").save).to eq(true) }
+    
+    context "channel_id" do
+      it{ expect(User.new(:channel_id => nil, :name => "my name", :display_name => "My Name").save).to eq(true) }
+      it{ expect(User.new(:channel_id => channel_used.id, :name => "my name", :display_name => "My Name").save).to eq(false) }
+    end
+    context "name" do
+      let!(:existing_channel){ create :channel }
+      it{ expect(User.new(:name => other_user.name, :display_name => "My Name").save).to eq(false) }
+      it{ expect(User.new(:name => nil, :display_name => "My Name").save).to eq(false) }
+    end
+    
+    context "display_name" do
+      let!(:existing_channel){ create :channel }
+      it{ expect(User.new(:name => "nil", :display_name => nil).save).to eq(false) }
+    end
   end
   
   describe "#request_channel" do

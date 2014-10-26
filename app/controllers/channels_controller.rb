@@ -1,7 +1,7 @@
 class ChannelsController < ApplicationController
   respond_to :json
-  load_and_authorize_resource :except => [:create]
-  authorize_resource :only => [:create]
+  load_and_authorize_resource :except => [:create, :show]
+  authorize_resource :only => [:create, :show]
   
   def create
     if current_user.request_channel
@@ -12,12 +12,19 @@ class ChannelsController < ApplicationController
   end
   
   def show
-    # If the user exists and does not have a channel
-    if !current_user.nil? && @channel.find_channel_account(current_user).nil?
-      current_user.channel_account_for(@channel) 
-    end
+    @user = User.where(:name => params[:name]).first
+    @channel = @user ? @user.channel : nil
     
-    render :json => @channel
+    if @channel
+      # If the user exists and does not have a channel
+      if !current_user.nil? && @channel.find_channel_account(current_user).nil?
+        current_user.channel_account_for(@channel) 
+      end
+      
+      render :json => @channel
+    else
+      render :nothing => true, :status => 400
+    end
   end
   
   def set_inactive

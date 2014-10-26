@@ -83,6 +83,14 @@ class Channel < ActiveRecord::Base
     active_bets.inject(0){ |sum, bet| bet.amount + sum }
   end
   
+  def name
+    user.name
+  end
+  
+  def display_name
+    user.display_name
+  end
+  
   private
   
   def deactivate

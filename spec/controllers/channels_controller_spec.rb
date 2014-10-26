@@ -52,14 +52,14 @@ describe ChannelsController do
         expect(new_user.channel_accounts.length).to eq(0)
         channel.status = "betting_open"
         channel.save!
-        get :show, {:id => channel.id, :format => :json}
+        get :show, {:name => channel.name, :format => :json}
       }
       
       it{ expect(response.code).to eq "200" }
       it{ expect(new_user.reload.channel_accounts.length).to eq(1) }
       it{ expect(new_user.reload.channel_accounts.first.channel_id).to eq(channel.id) }
       it{
-        get :show, {:id => channel.id, :format => :json}; expect(new_user.reload.channel_accounts.length).to eq(1)
+        get :show, {:name => channel.name, :format => :json}; expect(new_user.reload.channel_accounts.length).to eq(1)
       }
     end
     
@@ -72,13 +72,14 @@ describe ChannelsController do
         before{
           channel.status = "betting_open"
           channel.save!
-          get :show, {:id => channel.id, :format => :json}
+          get :show, {:name => channel.name, :format => :json}
         }
         
         it{ expect(response.code).to eq "200" }
         it{ 
           expect(json).to eq({ "id" => channel.id,
             "name" => channel.name,
+            "display_name" => channel.display_name,
             "status" => channel.status,
             "pot" => channel.pot,
             "channel_account" => { "id" => channel_account.id,
@@ -95,12 +96,13 @@ describe ChannelsController do
         context "in the middle of betting" do
           before{
             channel_account.bet(5, 5)
-            get :show, {:id => channel.id, :format => :json}
+            get :show, {:name => channel.name, :format => :json}
           }
           
           it{ 
             expect(json).to eq({ "id" => channel.id,
               "name" => channel.name,
+              "display_name" => channel.display_name,
               "status" => channel.status,
               "pot" => 5,
               "channel_account" => { "id" => channel_account.id,
@@ -120,14 +122,16 @@ describe ChannelsController do
       end
       
       context "owned by other user" do
+        let!(:user){ create :user, :channel => unrelated_channel }
         before{
-          get :show, {:id => unrelated_channel.id, :format => :json}
+          get :show, {:name => unrelated_channel.name, :format => :json}
         }
         
         it{ expect(response.code).to eq "200" }
         it{ 
           expect(json).to eq({ "id" => unrelated_channel.id,
             "name" => unrelated_channel.name,
+            "display_name" => unrelated_channel.display_name,
             "status" => unrelated_channel.status,
             "pot" => unrelated_channel.pot,
             "channel_account" => { "id" => unrelated_channel.channel_accounts.first.id,
@@ -145,17 +149,37 @@ describe ChannelsController do
     
     context "logged out" do
       before{
-        get :show, {:id => channel.id, :format => :json}
+        get :show, {:name => channel.name, :format => :json}
       }
       
       it{ expect(response.code).to eq "200" }
       it{ 
         expect(json).to eq({ "id" => channel.id,
           "name" => channel.name,
+          "display_name" => channel.display_name,
           "status" => channel.status,
           "pot" => channel.pot,
         })
      }
+    end
+    
+    context "non-existant channel" do
+      context "user" do
+        before{
+          sign_in create(:user)
+          get :show, {:name => "this is not a channel", :format => :json}
+        }
+      
+        it{ expect(response.code).to eq "400" }
+      end
+      
+      context "logged out" do
+        before{
+          get :show, {:name => "this is not a channel", :format => :json}
+        }
+      
+        it{ expect(response.code).to eq "400" }
+      end
     end
   end
   

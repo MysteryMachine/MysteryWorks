@@ -9,13 +9,15 @@ class User < ActiveRecord::Base
   belongs_to :channel
   
   validates :channel_id, :uniqueness => true, :allow_nil => true
-  validates_presence_of :name
+  validates :name, :uniqueness => true, :presence => true
+  validates :display_name, :uniqueness => true, :presence => true
   
   # An OAuth magic function stolen from the wiki. Sets the provider, uid
   # name, and email of a User and creates it if a User doesn't exist, other
   # wise, it just selects the existing user
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid.to_s).first_or_create do |user|
+      user.display_name = auth.info.display_name
       user.name = auth.info.name
       user.email = auth.info.email
     end
@@ -33,7 +35,7 @@ class User < ActiveRecord::Base
     if channel.nil?
       begin
         transaction do
-          channel = Channel.new(:name => self.name)
+          channel = Channel.new
           channel.save!
           self.channel_id = channel.id
           self.save!

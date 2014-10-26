@@ -1,5 +1,5 @@
 class ChannelSerializer < ActiveModel::Serializer
-  attributes :id, :name, :status, :pot
+  attributes :id, :display_name, :name, :status, :pot
   
   def attributes
     data = super

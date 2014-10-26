@@ -1,8 +1,18 @@
 require 'rails_helper'
 
 describe Channel do
+  describe "validations" do
+    context "status" do
+      it{ expect(Channel.new(:status => "inactive").save).to eq(true) }
+      it{ expect(Channel.new(:status => "betting_open").save).to eq(true) }
+      it{ expect(Channel.new(:status => "betting_closed").save).to eq(true) }
+      it{ expect(Channel.new(:status => "other").save).to eq(false) }
+      it{ expect(Channel.new(:status => nil ).save).to eq(false) }
+    end
+  end
+  
   it "can go through the entire model side flow" do
-    channel = Channel.new(:name => "Mantron", :user => create(:user))
+    channel = Channel.new(:user => create(:user))
     channel.save!
     
     account_1 = ChannelAccount.new(:channel => channel, :user => create(:user))

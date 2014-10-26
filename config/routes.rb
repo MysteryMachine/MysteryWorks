@@ -8,7 +8,8 @@ MysteryWorks::Application.routes.draw do
   
   get '/user', to: 'users#user'
   
-  resources :channels, :only => [:show, :create] do
+  get '/channels/:name', :to => "channels#show"
+  resources :channels, :only => [:create] do
     member do
       post 'set_inactive'
       post 'open_betting'
