@@ -11,7 +11,7 @@ class Bet < ActiveRecord::Base
 
   validates :enemy_id, :numericality => { :greater_than => 0 }
   validates :channel_account_id, :numericality => { :greater_than => 0 }
-  validates :amount, :inclusion => { :in => VALID_BETS }
+  validates :amount, :numericality => { :greater_than => 0 }
   validates :status, :inclusion => { :in => VALID_STATUSES }
   
   scope :active, lambda {where(:status => OPEN)}

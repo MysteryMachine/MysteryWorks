@@ -5,6 +5,4 @@ module BetHelper
   CLOSED = "closed"
   
   VALID_STATUSES = [INVALIDATED, OPEN, PAID_OUT, CLOSED]
-  
-  VALID_BETS = [1, 5, 10]
 end
