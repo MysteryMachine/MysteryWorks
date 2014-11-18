@@ -81,7 +81,7 @@ describe ChannelsController do
             "name" => channel.name,
             "display_name" => channel.display_name,
             "status" => channel.status,
-            "pot" => channel.pot,
+            "whole_pot" => channel.whole_pot,
             "channel_account" => { "id" => channel_account.id,
               "balance" => channel_account.balance,
               "health" => channel_account.health,
@@ -104,7 +104,7 @@ describe ChannelsController do
               "name" => channel.name,
               "display_name" => channel.display_name,
               "status" => channel.status,
-              "pot" => 5,
+              "whole_pot" => 5,
               "channel_account" => { "id" => channel_account.id,
                 "balance" => 5,
                 "health" => channel_account.health,
@@ -133,7 +133,7 @@ describe ChannelsController do
             "name" => unrelated_channel.name,
             "display_name" => unrelated_channel.display_name,
             "status" => unrelated_channel.status,
-            "pot" => unrelated_channel.pot,
+            "whole_pot" => unrelated_channel.whole_pot,
             "channel_account" => { "id" => unrelated_channel.channel_accounts.first.id,
               "health" => unrelated_channel.channel_accounts.first.health,
               "max_health" => unrelated_channel.channel_accounts.first.max_health,
@@ -158,7 +158,7 @@ describe ChannelsController do
           "name" => channel.name,
           "display_name" => channel.display_name,
           "status" => channel.status,
-          "pot" => channel.pot,
+          "whole_pot" => channel.whole_pot,
         })
      }
     end

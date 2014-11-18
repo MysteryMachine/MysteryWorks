@@ -54,17 +54,13 @@ describe ChannelAccount do
   end
   
   describe "#bet" do 
-    it{
-      channel_account.bet(20, 2)
-      expect(channel_account.bets.first.errors.messages[:amount].first).to eq("is not included in the list")
-    }
 
     it{ expect(channel_account.bet(1, 1)).to eq(true) }
     it{ expect{ channel_account.bet(1, 1) }.to change{ channel_account.status }.to("betting") }
     it{ expect(channel_account.bet(-1, 1)).to eq(false) }
     it{ 
       channel_account.bet(-1, 1)
-      expect(channel_account.bets.first.errors.messages[:amount].first).to eq("is not included in the list")
+      expect(channel_account.bets.first.errors.messages[:amount].first).to eq("must be greater than 0")
     }
     it{ expect{channel_account.bet(1, 1)}.to change{channel_account.bets.length}.by(1) }
     it{

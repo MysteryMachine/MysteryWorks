@@ -79,8 +79,12 @@ class Channel < ActiveRecord::Base
     bets.active
   end
   
-  def pot
-    active_bets.inject(0){ |sum, bet| bet.amount + sum }
+  def whole_pot
+    pot(active_bets)
+  end
+  
+  def pot(bet_group)
+    bet_group.inject(0){ |sum, bet| bet.amount + sum }
   end
   
   def name
@@ -106,9 +110,11 @@ class Channel < ActiveRecord::Base
     winners = bets.winners(enemy_id)
     losers = bets.losers(enemy_id)
     
+    winner_pot = pot(winners)
+    total = winner_pot + pot(losers)
+    
     if winners.length > 0
-      award = pot / winners.length 
-      winners.each { |b| b.pay_out(award) }
+      winners.each { |b| b.pay_out(winner_pot, total) }
       losers.each { |b| b.close }
     else
       invalidate_bets

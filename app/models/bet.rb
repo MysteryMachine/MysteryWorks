@@ -20,7 +20,9 @@ class Bet < ActiveRecord::Base
   
   # HELPERS
   
-  def pay_out(paid_amount)
+  def pay_out(winner_pot, total)
+    paid_amount = ((amount.to_f/winner_pot)*total).ceil
+    
     channel_account.pay_out(paid_amount)
     self.status = PAID_OUT
     self.save!

@@ -7,8 +7,10 @@ describe Bet do
   }
   
   describe "#pay_out" do
-    it{ expect{ bet.pay_out(10) }.to change { bet.channel_account.balance }.by(10) }
-    it{ expect{ bet.pay_out(10) }.to change { bet.status }.from("open").to("paid_out") }
+    it{ expect{ bet.pay_out(10, 20) }.to change { bet.channel_account.balance }.by(20) }
+    it{ expect{ bet.pay_out(15, 20) }.to change { bet.channel_account.balance }.by(14) }
+    it{ expect{ bet.pay_out(10, 10) }.to change { bet.channel_account.balance }.by(10) }
+    it{ expect{ bet.pay_out(10, 20) }.to change { bet.status }.from("open").to("paid_out") }
   end
   
   describe "#close" do

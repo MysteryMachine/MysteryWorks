@@ -2,8 +2,10 @@ class ApplicationController < ActionController::Base
   include ActionController::MimeResponds
   include ActionController::HttpAuthentication::Basic::ControllerMethods
   include ActionController::Cookies
+  include ActionController::Serialization
 
   serialization_scope :current_user
+  
   
   # This function is used by OAuth, was copied from wiki
   def new_session_path(scope)

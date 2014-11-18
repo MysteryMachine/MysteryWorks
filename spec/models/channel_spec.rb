@@ -156,7 +156,8 @@ describe Channel do
   describe "#pot" do
     let!(:channel){ create :channel, :with_bets, :status => "betting_closed" }
     
-    it{ expect(channel.pot).to eq(20) }
+    it{ expect(channel.pot(channel.bets.winners(1))).to eq(10) }
+    it{ expect(channel.pot(channel.bets.losers(1))).to eq(10) }
   end
   
   describe "#active_bets" do
@@ -180,6 +181,12 @@ describe Channel do
   
   describe "#complete_bets" do
     let!(:channel){ create :channel, :with_bets, :status => "betting_closed" }
+    let!(:channel_account_also_right){ 
+      channel_account = create :channel_account, :channel => channel
+      channel_account.bets << create(:bet, :channel_account => channel_account, :amount => 5)
+      channel.channel_accounts << channel_account
+      channel_account
+    }
     let!(:channel_account_right){ channel.channel_accounts[0] }
     let!(:channel_account_wrong){ channel.channel_accounts[1] }
     let!(:channel_account_closed){ channel.channel_accounts[2] }
@@ -193,7 +200,8 @@ describe Channel do
     it{ expect{ channel.complete_betting(1) }.to change{ channel_account_resting.reload.status }.to("inactive") }
     it{ expect{ channel.complete_betting(1) }.to change{ channel_account_donating.reload.status }.to("inactive") }
     
-    it{ expect{ channel.complete_betting(1) }.to change{ channel_account_right.reload.balance }.by(20) }
+    it{ expect{ channel.complete_betting(1) }.to change{ channel_account_right.reload.balance }.from(10).to(27) }
+    it{ expect{ channel.complete_betting(1) }.to change{ channel_account_also_right.reload.balance }.from(10).to(19) }
     it{ expect{ channel.complete_betting(1) }.not_to change{ channel_account_wrong.reload.balance } }
     it{ expect{ channel.complete_betting(1) }.not_to change{ channel_account_closed.reload.balance } }
     it{ expect{ channel.complete_betting(1) }.not_to change{ channel_account_invalidated.reload.balance } }

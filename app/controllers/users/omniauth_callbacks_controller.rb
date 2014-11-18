@@ -4,7 +4,11 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     
     if @user.persisted?
       sign_in @user #this will throw if @user is not activated
-      redirect_to app_path
+      if request.env['omniauth.origin']
+        redirect_to app_path + "/#?channel=#{request.env['omniauth.origin']}"
+      else
+        redirect_to app_path
+      end
     end
   end
 end
